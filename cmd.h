@@ -120,5 +120,5 @@ int cmd_mv(int argc, char **argv);
 int cmd_import(int argc, char **argv);
 #define cmd_import_usage "import [--keep-dupes] [CSV_FILENAME]"
 
-int cmd_test(int argc, char **argv);
+int cmd_test();
 #define cmd_test_usage "test" color_usage

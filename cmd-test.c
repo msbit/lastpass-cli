@@ -1,6 +1,6 @@
 #include "config.h"
 
-int cmd_test(int argc, char **argv)
+int cmd_test()
 {
 	printf("config_path(\"\"):                                 %s\n", config_path(""));
 	printf("config_path(\"upload-queue\"):                     %s\n", config_path("upload-queue"));
