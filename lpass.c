@@ -71,7 +71,8 @@ static struct {
 	CMD(sync),
 	CMD(export),
 	CMD(import),
-	CMD(share)
+	CMD(share),
+	CMD(test)
 };
 #undef CMD
 
