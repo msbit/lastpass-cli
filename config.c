@@ -151,16 +151,10 @@ char *config_path_for_type(enum config_type type, const char *name)
 		xasprintf(&config, "%s/.lpass", home);
 	}
 
-	ret = stat(config, &sbuf);
-	if ((ret == -1 && errno == ENOENT) || !S_ISDIR(sbuf.st_mode)) {
-		unlink(config);
-		if (mkdir(config, 0700) < 0)
-			die_errno("mkdir(%s)", config);
-	} else if (ret == -1)
-		die_errno("stat(%s)", config);
+	xasprintf(&path, "%s/%s", config, name);
 
-	_cleanup_free_ char *buffer = xstrdup(name);
-	_cleanup_free_ char *dir_path = xstrdup(config);
+	_cleanup_free_ char *buffer = xstrdup(path);
+	_cleanup_free_ char *dir_path = "";
 	char *saveptr = NULL;
 	for (char *token = strtok_r(buffer, "/", &saveptr); token && saveptr && strlen(saveptr) > 0; token = strtok_r(NULL, "/", &saveptr)) {
 		xstrappendf(&dir_path, "/%s", token);
@@ -173,8 +167,6 @@ char *config_path_for_type(enum config_type type, const char *name)
 		} else if (ret == -1)
 			die_errno("stat(%s)", dir_path);
 	}
-
-	xasprintf(&path, "%s/%s", config, name);
 
 	return path;
 }
