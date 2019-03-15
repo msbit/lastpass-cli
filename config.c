@@ -154,9 +154,14 @@ char *config_path_for_type(enum config_type type, const char *name)
 	xasprintf(&path, "%s/%s", config, name);
 
 	_cleanup_free_ char *buffer = xstrdup(path);
-	_cleanup_free_ char *dir_path = "";
+	_cleanup_free_ char *dir_path = xstrdup("");
 	char *saveptr = NULL;
-	for (char *token = strtok_r(buffer, "/", &saveptr); token && saveptr && strlen(saveptr) > 0; token = strtok_r(NULL, "/", &saveptr)) {
+	char *token = strtok_r(buffer, "/", &saveptr);
+	if (strchr(buffer, '/') != buffer) {
+		xstrappend(&dir_path, token);
+		token = strtok_r(NULL, "/", &saveptr);
+	}
+	for (; token && saveptr && strlen(saveptr) > 0; token = strtok_r(NULL, "/", &saveptr)) {
 		xstrappendf(&dir_path, "/%s", token);
 
 		ret = stat(dir_path, &sbuf);
